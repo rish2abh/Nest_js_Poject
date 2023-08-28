@@ -41,6 +41,13 @@ export class PostCommentService {
   async createPostComment(id, createPostCommentDto) {
     try {
       const userId = new Types.ObjectId(id);
+      const postId = new Types.ObjectId( createPostCommentDto.postId)
+      
+      const checkpost = await this.PostModel.find({_id :postId})
+      
+      if(checkpost.length<= 0 ){
+        return new HttpException('No such post found.', HttpStatus.BAD_GATEWAY);
+        }
       
       const postComment = new this.CommentModel({
         ...createPostCommentDto,

@@ -5,70 +5,46 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFile,
-  Request,
 } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { PostCommentService } from '../Service/post.service';
 import { CreatePostDto } from 'src/common/dto/userPost.dto';
 import { CreatePostCommentDto } from 'src/common/dto/postComment.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/common/auth/guards/local.guard';
-import { TokenId } from 'src/common/custom_decorator/token_id';
+import { ExtractUserId } from 'src/common/custom_decorator/token_id';
 
+@ApiBearerAuth()
+@ApiTags('Post-Commnet')
 @Controller('post-comment')
+@UseGuards(JwtAuthGuard)
 export class PostCommentController {
-  constructor(
-    private readonly postCommentService: PostCommentService,
-    private readonly tokenId: TokenId,
-  ) {}
+  constructor(private readonly postCommentService: PostCommentService) {}
+
 
   @Post('post')
-  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image_URL'))
-  async upload(
+  upload(
     @UploadedFile() file: Express.Multer.File,
     @Body() CreatePostDto: CreatePostDto,
-    @Request() req: any,
+    @ExtractUserId() userId: string,
   ) {
-    try {
-      let id = await this.tokenId.extract_Id(req);
-      const uploadResult = await this.postCommentService.createPostUser(
-        id,
-        file,
-        CreatePostDto,
-      );
-      console.log(uploadResult, 'uploadResult');
-
-      return {
-        status: true,
-        uploadResult,
-      };
-    } catch (error) {
-      console.error(error);
-      return {
-        status: false,
-        error: 'An error occurred while processing the upload.',
-      };
-    }
+    return this.postCommentService.createPostUser(userId, file, CreatePostDto);
   }
 
   @Post('comment')
-  @UseGuards(JwtAuthGuard)
- async comment(
+  comment(
     @Body() CreatePostCommentDto: CreatePostCommentDto,
-    @Request() req: any,
+    @ExtractUserId() userId: string,
   ) {
-    try {
-      let id = await this.tokenId.extract_Id(req);
-      return this.postCommentService.createPostComment(
-        id,
-        CreatePostCommentDto,
-      );
-    } catch (error) {
-      console.error(error);
-      return {
-        status: false,
-        error: 'An error occurred while creating the comment.',
-      };
-    }
+    return this.postCommentService.createPostComment(
+      userId,
+      CreatePostCommentDto,
+    );
   }
 }

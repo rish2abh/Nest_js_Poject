@@ -11,7 +11,7 @@ import { AuthModule } from 'src/common/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { PostComment, PostCommentSchema } from 'src/common/Schema/comment.schema';
 import { CloudinaryService } from 'src/common/cloudnary/cloudnary';
-import { TokenId } from 'src/common/custom_decorator/token_id';
+// import { TokenId } from 'src/common/custom_decorator/token_id';
 
 @Module({
   imports: [
@@ -19,12 +19,12 @@ import { TokenId } from 'src/common/custom_decorator/token_id';
     AuthModule,
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
-      { name: Photo.name, schema: PhotoSchema },
+      { name: Photo.name, schema: PhotoSchema },          
       { name: PostComment.name, schema: PostCommentSchema },
     ]),
   ],
   controllers: [UserController, GalleryController],
-  providers: [UserService, GalleryService, CloudinaryService,TokenId], // Add CloudinaryService to providers
+  providers: [UserService, GalleryService, CloudinaryService], // Add CloudinaryService to providers
 })
 export class UserModule {}
 

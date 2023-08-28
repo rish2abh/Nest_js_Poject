@@ -7,7 +7,6 @@ import { Post, PostSchema } from 'src/common/Schema/post.schema';
 import { PostComment, PostCommentSchema } from 'src/common/Schema/comment.schema';
 import { User, UserSchema } from 'src/common/Schema/user.schema';
 import { CloudinaryService } from 'src/common/cloudnary/cloudnary';
-import { TokenId } from 'src/common/custom_decorator/token_id';
 
 
 @Module({
@@ -17,6 +16,6 @@ import { TokenId } from 'src/common/custom_decorator/token_id';
     // { name: User.name, schema: UserSchema },
   ]),],
   controllers: [PostCommentController],
-  providers: [PostCommentService,CloudinaryService,TokenId]
+  providers: [PostCommentService,CloudinaryService]
 })
 export class PostCommentModule {}

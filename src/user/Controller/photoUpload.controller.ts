@@ -4,45 +4,26 @@ import {
   Body,
   UseInterceptors,
   UploadedFile,
-  BadRequestException,
   UseGuards,
-  Request,
 } from '@nestjs/common';
-import { UserPhotoDto } from 'src/common/dto/userPhoto.dto';
 import { GalleryService } from '../Service/photoUpload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/common/auth/guards/local.guard';
-import { TokenId } from 'src/common/custom_decorator/token_id';
+import { ExtractUserId } from 'src/common/custom_decorator/token_id';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('userGallery')
+@ApiTags('UserProfilePic')
 export class GalleryController {
-  constructor(private readonly GalleryService: GalleryService,
-      private readonly tokenId : TokenId) {}
+  constructor(private readonly GalleryService: GalleryService) {}
 
   @Post('upload')
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('photoURL'))
-  async upload(
+  upload(
     @UploadedFile() file: Express.Multer.File,
-    @Body() userPhotoDTO: UserPhotoDto,
-    @Request() req: any,
+    @ExtractUserId() userId: string,
   ) {
-    try {
-      let id = await this.tokenId.extract_Id(req)
-      const uploadResult = await this.GalleryService.uploadPhoto( id, file, userPhotoDTO);
-      console.log(uploadResult, 'uploadResult');
-
-      return {
-        status: true,
-        uploadResult,
-      };
-    } catch (error) {
-      if (error instanceof BadRequestException) {
-        throw new BadRequestException('Invalid file type.');
-      } else {
-        // Handle other errors here
-        throw error;
-      }
-    }
+    return this.GalleryService.uploadPhoto(userId, file);
   }
 }

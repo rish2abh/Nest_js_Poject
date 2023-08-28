@@ -86,47 +86,55 @@ export class UserService {
     };
   }
 
-  async userData(id) {
-    console.log(id, 'userId');
-    const userId = new Types.ObjectId(id);
-    const list = await this.userModel.aggregate([
-      { $match: { _id: userId } },
-      { $project : {
-         token : 0
-      }
-    },
-      { 
-        $lookup: {
-          from: 'photos',
-          localField: '_id',
-          foreignField: 'userID',
-          as: 'All_Photos',
+  async userData(id: string) {
+    try {
+      console.log(id, 'userId');
+      const userId = new Types.ObjectId(id);
+
+      const list = await this.userModel.aggregate([
+        { $match: { _id: userId } },
+        {
+          $project: {
+            token: 0,
+          },
         },
-      },
-      {
-        $lookup: {
-          from: 'posts',
-          localField: '_id',
-          foreignField: 'userID',
-          as: 'all_UserPost',
-          pipeline: [
-            {
-              $lookup: {
-                from: 'postcomments',
-                localField: '_id',
-                foreignField: 'postId',
-                as: 'all_comments',
+        {
+          $lookup: {
+            from: 'photos',
+            localField: '_id',
+            foreignField: 'userID',
+            as: 'All_Photos',
+          },
+        },
+        {
+          $lookup: {
+            from: 'posts',
+            localField: '_id',
+            foreignField: 'userID',
+            as: 'all_UserPost',
+            pipeline: [
+              {
+                $lookup: {
+                  from: 'postcomments',
+                  localField: '_id',
+                  foreignField: 'postId',
+                  as: 'all_comments',
+                },
               },
-            },
-          ],  
+            ],
+          },
         },
-      },
-    ])
-    
-    return {
-      status: 'sucess',
-      message: 'Data fetched successfully',
-      data: list,
-    };
+      ]);
+
+      return {
+        status: 'success',
+        message: 'Data fetched successfully',
+        data: list,
+      };
+    } catch (error) {
+      // Handle errors here
+      console.error('Error in userData:', error.message);
+      throw new Error('Unable to fetch user data');
+    }
   }
 }

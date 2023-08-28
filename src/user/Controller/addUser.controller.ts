@@ -2,14 +2,15 @@ import { Controller, Get, Post, Body, UseGuards, Request } from '@nestjs/common'
 import { UserService } from '../Service/addUser.service';
 import { CreateUserDto, LoginDto } from 'src/common/dto/createUser.dto';
 import { JwtAuthGuard } from 'src/common/auth/guards/local.guard';
-import { TokenId } from 'src/common/custom_decorator/token_id';
+import { ExtractUserId } from 'src/common/custom_decorator/token_id';
+import { ApiTags } from '@nestjs/swagger';
 
 
 
+@ApiTags('User')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService,
-    private  tokenId : TokenId ) {}
+  constructor(private readonly userService: UserService ) {}
   
   @Post('signUp')
   signUp(@Body() CreateUserDto: CreateUserDto ) {
@@ -23,17 +24,8 @@ export class UserController {
 
   @Get('list')
   @UseGuards(JwtAuthGuard)
-  async list(@Request() req: any) {
-    try {
-    
-       let id = await this.tokenId.extract_Id(req)
-      const userData = await this.userService.userData(id);
-      return userData;
-    } catch (error) {
-      // Handle errors here
-      console.error('Error in list:', error.message);
-      throw new Error('Unable to retrieve user data');
-    }
+  list(@ExtractUserId() userId: string) {
+      return  this.userService.userData(userId); 
   }
 
 }
