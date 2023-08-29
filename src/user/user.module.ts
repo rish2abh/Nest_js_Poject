@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module} from '@nestjs/common';
 import { UserController } from './Controller/addUser.controller';
 import { UserService } from './Service/addUser.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -24,7 +24,7 @@ import { CloudinaryService } from 'src/common/cloudnary/cloudnary';
     ]),
   ],
   controllers: [UserController, GalleryController],
-  providers: [UserService, GalleryService, CloudinaryService], // Add CloudinaryService to providers
+  providers: [UserService, GalleryService, CloudinaryService], 
 })
 export class UserModule {}
 

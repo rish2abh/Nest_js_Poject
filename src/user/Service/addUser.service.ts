@@ -1,13 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable  } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { User } from 'src/common/Schema/user.schema';
 import { CreateUserDto, LoginDto } from 'src/common/dto/createUser.dto';
 import * as crypto from 'crypto';
-import { JwtService } from '@nestjs/jwt';
 import { AuthService } from 'src/common/auth/auth.service';
-import { pipeline } from 'stream';
 import { PostComment } from 'src/common/Schema/comment.schema';
+import axiso from  'axios';
+
+import axios from 'axios';
 
 @Injectable()
 export class UserService {
@@ -30,11 +31,26 @@ export class UserService {
       .update(createUserDto.password)
       .digest('hex');
 
-      
-      const userWithHashedPassword = {
-        ...createUserDto,
-        password: hashedPassword,
-      };
+   
+    const address = await axios({
+      method: 'get',
+      url: `https://api.postalpincode.in/pincode/${createUserDto.pincode}`,
+    })
+      .then((response) => {
+        return response.data[0]?.PostOffice[0] || null;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    
+    console.log(address, "address");
+    
+    const userWithHashedPassword = {
+      ...createUserDto,
+      password: hashedPassword,
+      address: address,
+    };
+    
     
     const createdUser = new this.userModel(userWithHashedPassword);
     const data = await createdUser.save();
@@ -86,6 +102,7 @@ export class UserService {
     };
   }
 
+  
   async userData(id: string) {
     try {
       console.log(id, 'userId');

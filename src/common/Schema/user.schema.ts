@@ -1,4 +1,4 @@
-import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
+import { Prop, SchemaFactory, Schema, raw } from '@nestjs/mongoose';
 import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Document } from 'mongoose';
 
@@ -29,6 +29,24 @@ export class User extends Document {
 
   @Prop()
   token: string;
+
+  @Prop({ type: Date, default: Date.now })
+  tokenExpiresAt: Date; 
+
+
+  @Prop()
+  pincode: string;
+
+  @Prop(raw({
+
+    Name: { type: String },
+    District: { type: String },
+    Division: { type: String },
+    Region: { type: String },
+    State: { type: String },
+    Country: { type: String }
+  }))
+  address: Record<string, any>;
 
 }
 

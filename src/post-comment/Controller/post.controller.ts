@@ -1,17 +1,5 @@
-import {
-  Controller,
-  Post,
-  Body,
-  UseGuards,
-  UseInterceptors,
-  UploadedFile,
-} from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { Controller, Post, Body, UseGuards,UseInterceptors,UploadedFile } from '@nestjs/common';
+import { ApiBearerAuth,ApiTags } from '@nestjs/swagger';
 import { PostCommentService } from '../Service/post.service';
 import { CreatePostDto } from 'src/common/dto/userPost.dto';
 import { CreatePostCommentDto } from 'src/common/dto/postComment.dto';
@@ -23,6 +11,7 @@ import { ExtractUserId } from 'src/common/custom_decorator/token_id';
 @ApiTags('Post-Commnet')
 @Controller('post-comment')
 @UseGuards(JwtAuthGuard)
+
 export class PostCommentController {
   constructor(private readonly postCommentService: PostCommentService) {}
 
@@ -42,9 +31,6 @@ export class PostCommentController {
     @Body() CreatePostCommentDto: CreatePostCommentDto,
     @ExtractUserId() userId: string,
   ) {
-    return this.postCommentService.createPostComment(
-      userId,
-      CreatePostCommentDto,
-    );
+    return this.postCommentService.createPostComment(userId,CreatePostCommentDto);
   }
 }

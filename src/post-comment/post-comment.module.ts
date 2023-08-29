@@ -13,8 +13,7 @@ import { CloudinaryService } from 'src/common/cloudnary/cloudnary';
   imports : [AuthModule,MongooseModule.forFeature([
     { name: Post.name, schema: PostSchema },
     { name: PostComment.name, schema: PostCommentSchema },
-    // { name: User.name, schema: UserSchema },
-  ]),],
+  ])],
   controllers: [PostCommentController],
   providers: [PostCommentService,CloudinaryService]
 })

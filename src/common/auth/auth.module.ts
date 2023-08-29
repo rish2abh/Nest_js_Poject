@@ -5,15 +5,14 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from '../Schema/user.schema';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './guards/local.guard';
+
 
 @Module({
   imports: [
     PassportModule,
     JwtModule.register({
       secret: 'SNFNN@#$%!@',
-      signOptions: { expiresIn: '1hr' },
+      signOptions: { expiresIn: '1h' },
       
     }),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),

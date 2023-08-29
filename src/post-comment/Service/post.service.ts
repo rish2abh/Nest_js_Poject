@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { PostComment } from 'src/common/Schema/comment.schema';
 import { Post } from 'src/common/Schema/post.schema';
-import { User } from 'src/common/Schema/user.schema';
 import { CloudinaryService } from 'src/common/cloudnary/cloudnary';
 
 @Injectable()
@@ -40,7 +39,7 @@ export class PostCommentService {
 
   async createPostComment(id, createPostCommentDto) {
     try {
-      const userId = new Types.ObjectId(id);
+      // const userId = new Types.ObjectId(id);
       const postId = new Types.ObjectId( createPostCommentDto.postId)
       
       const checkpost = await this.PostModel.find({_id :postId})

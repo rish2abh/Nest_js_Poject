@@ -1,10 +1,8 @@
     import { Injectable } from '@nestjs/common';
-    // import * as jwt from 'jsonwebtoken';
     import { JwtService } from '@nestjs/jwt';
     import { User } from '../Schema/user.schema';
     import { InjectModel } from '@nestjs/mongoose';
     import { Model, Types } from 'mongoose';
-import { JwtAuthGuard } from './guards/local.guard';
     @Injectable()
     export class AuthService {
     constructor(private jwtService: JwtService,

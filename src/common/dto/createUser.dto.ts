@@ -55,7 +55,15 @@
     })  
     dateOfBirth: string;  // Format: YYYY-MM-DD
 
+
+    @IsNotEmpty()
+    @Length(6,6 , {
+      message:'Pincode must be six numbers long'})
+    
+    pincode : string
   }
+
+
 
   export class LoginDto {
     @IsEmail()
