@@ -17,7 +17,7 @@
     async validateUser(data){
         const payload = this.jwtService.decode(data)
         const objectID = new Types.ObjectId(payload.sub)
-        const validate =  await this.userModel.findOne({_id:objectID,token :data})
+        const validate =  await this.userModel.findOne({_id:objectID})
         return validate ? true :  false
     }
     }

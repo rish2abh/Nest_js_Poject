@@ -5,6 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from '../Schema/user.schema';
+import { GoogleStrategy } from './google.strategy';
 
 
 @Module({
@@ -17,7 +18,7 @@ import { User, UserSchema } from '../Schema/user.schema';
     }),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
-  providers: [AuthService, JwtStrategy],
-  exports: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy,GoogleStrategy],
+  exports: [AuthService, JwtStrategy,GoogleStrategy],
 })
 export class AuthModule {}

@@ -11,6 +11,7 @@ import { AuthModule } from 'src/common/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { PostComment, PostCommentSchema } from 'src/common/Schema/comment.schema';
 import { CloudinaryService } from 'src/common/cloudnary/cloudnary';
+import { MailService } from 'src/common/mailService/nodemailer';
 // import { TokenId } from 'src/common/custom_decorator/token_id';
 
 @Module({
@@ -24,7 +25,7 @@ import { CloudinaryService } from 'src/common/cloudnary/cloudnary';
     ]),
   ],
   controllers: [UserController, GalleryController],
-  providers: [UserService, GalleryService, CloudinaryService], 
+  providers: [UserService, GalleryService, CloudinaryService,MailService],      
 })
 export class UserModule {}
 
