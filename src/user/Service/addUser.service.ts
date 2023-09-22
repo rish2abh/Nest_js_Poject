@@ -80,38 +80,38 @@ export class UserService {
   }
 
   async login(loginDto: LoginDto) {
-    // const valUser = await this.userModel.findOne({ email: loginDto.email });
-     const valUser = await this.userModel.find({"email": "john.doe@example.com"}).explain("executionStats")
-    console.log(valUser,"valuser");
-    
-  //   if (!valUser) {
-  //     throw new Error('User not found');
-  //   }
-  //   const hashedPassword = crypto
-  //     .createHash('sha256')
-  //     .update(loginDto.password)
-  //     .digest('hex');
+    const valUser = await this.userModel.findOne({ email: loginDto.email });
+    console.log(valUser, 'valuser');
 
-  //   if (hashedPassword !== valUser.password) {
-  //     throw new Error('Invalid credentials');
-  //   }
+    if (!valUser) {
+      throw new Error('User not found');
+    }
+    const hashedPassword = crypto
+      .createHash('sha256')
+      .update(loginDto.password)
+      .digest('hex');
 
-  //   const token = await this.authservice.genrateToken(valUser);
-  //   console.log(token, 'token');
+    if (hashedPassword !== valUser.password) {
+      throw new Error('Invalid credentials');
+    }
 
-  //   const updateToken = await this.userModel.updateOne(
-  //     { _id: valUser._id },
-  //     { $set: { token: token.acessToken } },
-  //   );
+    const token = await this.authservice.genrateToken(valUser);
+    console.log(token, 'token');
 
-  //   const emailContent = `Welcome to our platform!`;
-  //   this.mailService.sendMail(loginDto.email, 'Welcome', emailContent);
+    const updateToken = await this.userModel
+      .updateOne
+          // { _id: valUser._id },
+          // { $set: { token: token.acessToken } },
+      ();
 
-  //   return {
-  //     status: 'success',
-  //     message: 'Login successful',
-  //     data: { token },
-  //   };
+    const emailContent = `Welcome to our platform!`;
+    this.mailService.sendMail(loginDto.email, 'Welcome', emailContent);
+
+    return {
+      status: 'success',
+      message: 'Login successful',
+      data: { token },
+    };
   }
 
   async userData(id: string) {
