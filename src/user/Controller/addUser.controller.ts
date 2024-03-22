@@ -27,15 +27,13 @@ export class UserController {
 
   @UseGuards(AuthGuard('google'))
   @Get('google')
-  async Google(@Req() req) {
-    
-  }
+  async Google(@Req() req) {}
 
   @Get('auth/google/callback')
   @UseGuards(AuthGuard('google'))
   async GoogleSignUp(@Req() req) {
-      console.log(req.user,"req");
-    return this.userService.googleSignUp(req)
+    console.log(req.user, 'req');
+    return this.userService.googleSignUp(req);
   }
 
   @Post('login')

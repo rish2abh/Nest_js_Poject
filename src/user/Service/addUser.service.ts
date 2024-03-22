@@ -100,8 +100,8 @@ export class UserService {
 
     const updateToken = await this.userModel
       .updateOne
-          // { _id: valUser._id },
-          // { $set: { token: token.acessToken } },
+      // { _id: valUser._id },
+      // { $set: { token: token.acessToken } },
       ();
 
     const emailContent = `Welcome to our platform!`;

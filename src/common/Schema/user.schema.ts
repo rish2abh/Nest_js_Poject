@@ -1,5 +1,4 @@
 import { Prop, SchemaFactory, Schema, raw } from '@nestjs/mongoose';
-import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Document } from 'mongoose';
 
 @Schema({ timestamps: true })
